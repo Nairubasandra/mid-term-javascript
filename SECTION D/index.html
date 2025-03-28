@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bucket List</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: gray;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: aqua;
+        }
+        #bucket-form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            margin-right: 5px;
+        }
+        button {
+            padding: 8px 12px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .edit, .delete {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1> Bucket List</h1>
+    <div id="bucket-form">
+        <input type="text" id="bucket-input" placeholder="What's on your bucket list?">
+        <button onclick="addItem()">Add to List</button>
+    </div>
+    <ul id="bucket-list"></ul>
+
+    <script>
+        let bucketList = JSON.parse(localStorage.getItem("bucketList")) || [];
+
+        function displayList() {
+            const listElement = document.getElementById("bucket-list");
+            listElement.innerHTML = "";
+            bucketList.forEach((item, index) => {
+                listElement.innerHTML += `
+                    <li>
+                        ${item}
+                        <span>
+                            <button class="edit" onclick="editItem(${index})">Edit</button>
+                            <button class="delete" onclick="deleteItem(${index})">Delete</button>
+                        </span>
+                    </li>
+                `;
+            });
+        }
+
+        function addItem() {
+            const input = document.getElementById("bucket-input");
+            if (input.value.trim()) {
+                bucketList.push(input.value);
+                localStorage.setItem("bucketList", JSON.stringify(bucketList));
+                input.value = "";
+                displayList();
+            }
+        }
+
+        function deleteItem(index) {
+            bucketList.splice(index, 1);
+            localStorage.setItem("bucketList", JSON.stringify(bucketList));
+            displayList();
+        }
+
+        function editItem(index) {
+            const newItem = prompt("Update your bucket list item:", bucketList[index]);
+            if (newItem !== null && newItem.trim()) {
+                bucketList[index] = newItem;
+                localStorage.setItem("bucketList", JSON.stringify(bucketList));
+                displayList();
+            }
+        }
+
+        displayList();
+    </script>
+</body>
+</html>
+</body>
+</html>
